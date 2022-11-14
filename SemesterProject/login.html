@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <link href="styles.css" rel="stylesheet">
+    </head>
+<body>
+	<div style="text-align:center; margin-left: 35%; width:50%;">
+    		<form id="formElement" method="post" action="">
+        		<div id="div_login" style="padding:25px; width: 25vw;">
+					<img height="150vh" src="Images\profileBlue.svg">
+					<h1>Login</h1>
+					<div>
+						<input type="text" class="textbox" id="username" name="username" placeholder="Username" />
+					</div>
+					<div>
+						<input type="password" class="textbox" id="password" name="password" placeholder="Password"/>
+					</div>
+					<div>
+						<input style="width: 35%; height: 40px;" type="button" value="Login" onclick="login()" name="submit" id="submit" />
+						<p>Dont have an account? <a href="signup.html">Sign Up</a></p>
+						<small id="error" style="color:red;"></small>
+					</div>
+				</div>
+    		</form>
+	</div>
+</body>
+</html>
+<script>
+var form = document.getElementById("formElement");
+var username = document.getElementById("username");
+var password = document.getElementById("password");
+var txtError = document.getElementById("error");
+
+function login(){
+	txtError.innerHTML = "";
+	if(username.value != "" && password.value != ""){
+		var xmlhttp = new XMLHttpRequest();
+			
+		xmlhttp.open("POST", "Scripts/login.php");
+		xmlhttp.getResponseHeader('Content-type', 'application/json');
+		
+		xmlhttp.onload = function(){
+			if(xmlhttp.responseText.split(",")[0] == 1){
+				username.style = "border:none;";
+				password.style = "border:none;";
+				txtError.innerHTML = ""
+				window.sessionStorage.setItem("name", xmlhttp.responseText.split(",")[1]);
+				window.sessionStorage.setItem("accnumber", xmlhttp.responseText.split(",")[2]);
+				window.sessionStorage.setItem("email", xmlhttp.responseText.split(",")[3]);
+				document.location.replace("main.html")
+			}
+			if(xmlhttp.responseText.split(",")[0] == 0){
+				txtError.innerHTML = xmlhttp.responseText.split(",")[1];				
+			}
+		}
+		xmlhttp.send(new FormData(form));
+	}
+	else{
+		username.style = "border:solid red; border-width:2px;";
+		password.style = "border:solid red; border-width:2px;";
+		txtError.innerHTML = "*Required"
+	}
+}
+</script>

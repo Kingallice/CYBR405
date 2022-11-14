@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<head>
+	<title>Temperature Converter</title>
+</head>
+<body>
+	<h2>Converter</h2>
+	<p><input style="border: 3px; border-style: inset; border-color: yellow;" id="input" type="number"></p>
+	<p>
+		<table>
+			<tr><th>From</th><th>To</th></tr>
+			<tr>
+				<td><input class="Celsius" name="from" type="radio" checked="on">Celsius</td>
+				<td><input class="Celsius" name="to" type="radio">Celsius</td></tr>
+			<tr>
+				<td><input class="Fahrenheit" name="from" type="radio">Fahrenheit</td>
+				<td><input class="Fahrenheit" name="to" type="radio" checked="on">Fahrenheit</td></tr>
+			<tr>
+				<td><input class="Kelvin" name="from" type="radio">Kelvin</td>
+				<td><input class="Kelvin" name="to" type="radio">Kelvin</td></tr>
+			<tr>
+				<td><input class="Rankine" name="from" type="radio">Rankine</td>
+				<td><input class="Rankine" name="to" type="radio">Rankine</td></tr>
+			<tr>
+				<td colspan=2><input style="width:100%;" onclick="Convert()" type="button" value="Convert"</td></tr>
+		</table>
+	</p>
+	<p id="outConvert"></p>
+	<p id="outFormula"></p>
+</body>
+</html>
+<script>
+//Converts input from selected
+function Convert(){
+	//gets currently selected radio buttons
+	var from = document.querySelector('input[name="from"]:checked');
+	var to = document.querySelector('input[name="to"]:checked');
+	//gets input
+	var input = document.getElementById("input").value;
+	//gets output elements
+	var outConvert = document.getElementById("outConvert");
+	var outFormula = document.getElementById("outFormula");
+	
+	if(from.className == "Celsius"){
+		if(to.className == "Celsius"){
+			outConvert.innerHTML = input*1 + "\u00B0C"
+			outFormula.innerHTML = "";
+		}
+		if(to.className == "Fahrenheit"){
+			outConvert.innerHTML = input*1 + "\u00B0C = " + ((input)*(9/5) + 32).toFixed(2) + "\u00B0F";
+			outFormula.innerHTML = "[\u00B0F] = ([\u00B0C] X 9/5) + 32";
+		}
+		if(to.className == "Kelvin"){
+			outConvert.innerHTML = input*1 + "\u00B0C = " + (input*1 + 273.15).toFixed(2) + "K"
+			outFormula.innerHTML = "[K] = [\u00B0C] + 273.15";
+		}
+		if(to.className == "Rankine"){
+			outConvert.innerHTML = input*1 + "\u00B0C = " + ((input)*(9/5) + 491.67).toFixed(2) + "\u00B0R";
+			outFormula.innerHTML = "[\u00B0R] = ([\u00B0C] X 9/5) + 491.67";
+		}
+	}		
+	if(from.className == "Fahrenheit"){
+		if(to.className == "Celsius"){
+			outConvert.innerHTML = input*1 + "\u00B0F = " + ((input - 32)*(5/9)).toFixed(2) + "\u00B0C";
+			outFormula.innerHTML = "[\u00B0C] = ([\u00B0F] - 32) X 5/9";
+		}
+		if(to.className == "Fahrenheit"){
+			outConvert.innerHTML = input*1 + "\u00B0F"
+			outFormula.innerHTML = "";
+		}
+		if(to.className == "Kelvin"){
+			outConvert.innerHTML = input*1 + "\u00B0F = " + ((input - 32)*(5/9) + 273.15).toFixed(2) + "K"
+			outFormula.innerHTML = "[K] = (([\u00B0F] - 32) X 5/9) + 273.15";
+		}
+		if(to.className == "Rankine"){
+			outConvert.innerHTML = input*1 + "\u00B0F = " + ((input)*1 + 459.67).toFixed(2) + "\u00B0R";
+			outFormula.innerHTML = "[\u00B0R] = [\u00B0F] + 459.67";
+		}
+	}
+	if(from.className == "Kelvin"){
+		if(to.className == "Celsius"){
+			outConvert.innerHTML = input*1 + "K = " + ((input)*1 - 273.15).toFixed(2) + "\u00B0C";
+			outFormula.innerHTML = "[\u00B0C] = [K] - 273.15";
+		}
+		if(to.className == "Fahrenheit"){
+			outConvert.innerHTML = input*1 + "K = " + ((input - 273.15)*(9/5) + 32).toFixed(2) + "\u00B0F"
+			outFormula.innerHTML = "[\u00B0F] = (([K] - 273.15) X 9/5) + 32";
+		}
+		if(to.className == "Kelvin"){
+			outConvert.innerHTML = input*1 + "K"
+			outFormula.innerHTML = "";
+		}
+		if(to.className == "Rankine"){
+			outConvert.innerHTML = input*1 + "K = " + ((input)*(9/5)).toFixed(2) + "\u00B0R";
+			outFormula.innerHTML = "[\u00B0R] = [\u00B0F] X 9/5";
+		}
+	}
+	if(from.className == "Rankine"){
+		if(to.className == "Celsius"){
+			outConvert.innerHTML = input*1 + "\u00B0R = " + ((input*1 - 491.67)*(5/9)).toFixed(2) + "\u00B0C";
+			outFormula.innerHTML = "[\u00B0C] = ([\u00B0R] - 491.67) X 5/9";
+		}
+		if(to.className == "Fahrenheit"){
+			outConvert.innerHTML = input*1 + "\u00B0R = " + (input*1 - 459.67).toFixed(2) + "\u00B0F"
+			outFormula.innerHTML = "[\u00B0F] = [\u00B0R] - 459.67";
+		}
+		if(to.className == "Kelvin"){
+			outConvert.innerHTML = input*1 + "\u00B0R = " + ((input)*(5/9)).toFixed(2) + "K";
+			outFormula.innerHTML = "[K] = [\u00B0R] X 5/9";
+		}
+		if(to.className == "Rankine"){
+			outConvert.innerHTML = input*1 + "\u00B0R"
+			outFormula.innerHTML = "";
+		}
+	}
+}
+</script>

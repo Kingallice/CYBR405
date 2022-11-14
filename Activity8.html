@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+	<title>Character Processing</title>
+	<h1 id="String"></h1>
+</head>
+<body>
+	<p>Enter the substring to search for <input id="txtSearch" type="text"><input id="btnSearch" onclick="searchStr()" type="button" value="Search"></p>
+	<br>
+	<br>
+	<p>There are <input id="txtCount" type="text" readonly> occurences of the substring in the string.</p>
+	<br>
+	<p>The sentence split into words is<br>
+	<textarea id="split" rows="5" readonly></textarea></p>
+	<br>
+	<p id="flipcase"><strong>Changing the uppercase to lowercase, and lowercase to uppercase:</strong><br></p>
+	<p id="dupe"><strong>The string after removing duplicate characters: </strong></p>
+</body>
+<script>
+//Variable for String
+var str = "JavaScript, often abbreviated as JS, is a high-level, interpreted scripting language that conforms to the ECMAScript specification.";
+document.getElementById("String").innerHTML = "The String to search is:<br>" + str;
+
+//Searches the string for an input and counts the occurences
+function searchStr(){
+	var count = 0;
+	var index = 0;
+	var input = document.getElementById("txtSearch").value.toLowerCase();
+	for(let i = 0;i < str.length; i++){
+		index = str.toLowerCase().indexOf(input, index + 1);
+		if(index >= 0)
+			count += 1;
+		else{
+			break;
+		}
+	}
+	document.getElementById("txtCount").value = count;
+}
+//Splits the sentence into array at ' ' and displays it 
+for (x of str.split(" ")){
+	document.getElementById("split").innerHTML += x + "\n";
+}
+//Flips the case of each character and displays new string
+for (let i = 0; i < str.length; i++){
+	var out = document.getElementById("flipcase");
+	if(str[i] == str[i].toLowerCase()){
+		out.innerHTML += str[i].toUpperCase();
+	}
+	else{
+		out.innerHTML += str[i].toLowerCase();
+	}
+}
+//Removes duplicate characters of string and display it
+strOut = str;
+arr = [strOut[0]];
+for(let i = 0; i < strOut.length; i++){
+	arrLen = arr.length;
+	for(let j = 0; j < arrLen; j++){
+		if(!arr.join("").includes(strOut[i])){
+			arr[arrLen] = strOut[i];
+		}
+	}
+}
+document.getElementById("dupe").innerHTML += arr.join("");
+</script>
+</html>

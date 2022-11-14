@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		th {
+			text-align:right;
+		}
+		.inputs {
+			height: 25px;
+		}
+		#primein {
+			width: 180px;
+		}
+	</style>
+</head>
+<body>
+<div id="overlay">
+	<form id="formElement">
+	<div id="overlayText" style="top:50px; height: 250px;">
+		<div style="height:10px;">
+			<svg style="height: 30px; width:30px;" onclick="CloseOverlay();">
+				<line x1="5" y1="25" 
+				  x2="25" y2="5" 
+				  stroke="black" 
+				  stroke-width="2"/>
+				<line x1="5" y1="5" 
+				  x2="25" y2="25" 
+				  stroke="black" 
+				  stroke-width="2"/></svg>
+		</div>
+		<div style="text-align:center;">
+			<h4>Please enter admin password!</h4>
+			<div>
+				<div>
+					<input type="password" class="overlayLogin" id="password" placeholder="Password">
+				</div>
+			<input style="width: 30%; height: 40px;" type="button" value="Submit" onclick="AddProduct()" name="submit" id="submit">
+			</div>
+			<small id="errorPass" style="color:red;"></small>
+		</div>
+	</div>
+	<div id="overlayBack" style="opacity: 0%;">
+	</div>
+	</form>
+</div>
+
+	<h1 style="font-size: 30pt; margin: 15px;">Add Product</h1>
+	<div style="margin: 15px; float:left; width: 450px;">
+		<table style="font-size: 20pt; width: 100%;">
+			<form id="addForm" enctype="multipart/form-data">
+			<tr><td><input type="password" id="PasswordEntry" name="Password" hidden></td></tr>
+			<tr><th>Category</th><td><select id="category" class="inputs" onchange='toggleHide()' name="CategoryMenu"></select></td></tr>
+			<tr id="catName" hidden><th style="font-size:12pt">Category Name</th><td><input class="inputs" id="catName" type="text" name="CategoryText"></td>
+			<tr><th>Item</th><td><input id="itemin" class="inputs" type="text" name="Item"></td></tr>
+			<tr><th>Brand</th><td><input id="brandin" class="inputs" type="text" name="Brand"></td></tr>
+			<tr><th>Price</th><td><input id="pricein" class="inputs" type="text" name="Price"></td></tr>
+			<tr><th>Description</th><td><input id="descin" class="inputs" type="text" name="Desc"></td></tr>
+			<!/form>
+			<!form id="images">
+			<tr><th>Image Upload</th></tr>
+			<tr><th style="font-size: 15pt;">Primary Image</th><td><input onchange="LoadPictures()" id="primein" class="inputs" type="file" name="file[]"></td></tr>
+			<tr><th style="font-size: 15pt;">Extra Images</th><td><input onchange="LoadPictures()" id="extrain" class="inputs" type="file" name="files[]" multiple></td></tr>
+			<!/form>
+			<tr><td></td><td style="padding:0px; font-size:10pt;">*Select multiple using CTRL</td></tr>
+			<tr><td colspan="2" style="text-align:center;">
+				<input onclick="OpenOverlay()" style="font-size: 20pt; width:50%; height:40px;" class="inputs" type="button" value="Add Product"><td></tr>
+			<tr><td style="text-align:center;" colspan=2><small id="error" style="color:red;"></small></td></tr>
+			</form>
+		</table>
+	</div>
+	<div id="preview" onerror="reload();" style="margin:15px; float:left;">
+		<div class="container" style="background-color: white; width:400px; height:300px;">
+			<img id="previewImage" class="center" style="width: 75%; max-width:90%; height: auto; max-height:90%" src="Images/noImage.svg"></img></div>
+		<div class="container" style="height: 75px">
+			<button style="float: left;" onclick="PrevImg()">
+				<svg width="50px" height="70px"><polygon points="35,10 35,60 10,35"/></svg>
+			</button>
+			<h2 class="center">Images</h2>
+			<button style="float: right;" onclick="NextImg()">
+				<svg width="50px" height="70px"><polygon points="10,10 35,35 10,60"/></svg>
+			</button></div>
+	</div>
+</body>
+<script>
+function toggleHide(){
+	if(document.getElementById("category").value == "other"){
+		document.getElementById('catName').hidden = false;
+	}
+	else{
+		document.getElementById('catName').hidden = true;
+	}
+}
+function CloseOverlay(){
+	document.getElementById("overlay").style.display = 'none';
+}
+function OpenOverlay(){
+	if(ValidInputs())
+		document.getElementById("overlay").style.display = 'block';
+}
+function ValidInputs(){
+	txtError = document.getElementById("error");
+	itemin = document.getElementById("itemin");
+	brandin = document.getElementById("brandin");
+	pricein = document.getElementById("pricein");
+	descin = document.getElementById("descin");
+	primein = document.getElementById("primein");
+	if(itemin.value != "" && brandin.value != "" && pricein.value != "" && descin.value != "" && primein.value != ""){
+		itemin.style = "";
+		brandin.style = "";
+		pricein.style = "";
+		descin.style = "";
+		primein.style = "";
+		txtError.innerHTML = "";
+		return true;
+	}
+	else
+		itemin.style = "border:solid red; border-width:2px;";
+		brandin.style = "border:solid red; border-width:2px;";
+		pricein.style = "border:solid red; border-width:2px;";
+		descin.style = "border:solid red; border-width:2px;";
+		primein.style = "border:solid red; border-width:2px;";
+		txtError.innerHTML = "*Required";
+		return false;
+}
+function AddProduct(){
+	//if(ValidInputs()){			
+	pass = document.getElementById("PasswordEntry");
+	pass.value = document.getElementById("password");
+		var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("POST", "Scripts/addproduct.php");
+			xmlhttp.getResponseHeader('Content-type', 'application/json');
+			
+			xmlhttp.onload = function(){
+				if(xmlhttp.responseText.includes("PASSWORDERROR"))
+					document.getElementById("errorPass").innerHTML = "Password Incorrect! Please try again.";
+				else if(xmlhttp.responseText.includes("Notice"));
+				else if(xmlhttp.responseText.includes("error"));
+				else{
+					alert(xmlhttp.responseText);
+					windows.location.replace("AddProduct.html");
+				}
+				pass.value = "";
+				
+			}
+			form = document.getElementById("addForm");
+			xmlhttp.send(new FormData(form));
+	//if(document.getElementById("errorPass").innerHTML != "")
+		//CloseOverlay();
+	document.getElementById("errorPass").innerHTML = "";
+}
+
+function GetCats(){
+	var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", "Scripts/getcatergories.php");
+		
+		xmlhttp.onreadystatechange = function(){
+			if(xmlhttp.readyState == XMLHttpRequest.DONE){
+				out = xmlhttp.responseText.split("_");
+				for(i = 0; i < out.length; i++){
+					if(out[i] != "")
+						document.getElementById("category").innerHTML += "<option value="+out[i]+">"+out[i].toUpperCase()+"</option>";
+				}
+				document.getElementById("category").innerHTML += "<option value='other'>Other</option>";
+			}
+		}
+		xmlhttp.send();
+}
+GetCats();
+
+fileList = [];
+x = 0;
+function LoadPictures(inString){
+	fileList = [];
+	filePrime = document.getElementById("primein").files;
+	filesExtra = document.getElementById("extrain").files;
+	
+	fileList[0] = filePrime.item(0);
+	if(filesExtra != null)
+		for(let i = 0; i < filesExtra.length; i++){
+			fileList[i+1] = filesExtra.item(i);
+		};
+	setImg(0);
+}
+
+//Changes the image that is being shown
+function PrevImg(){
+	x -= 1;
+	if(x < 0){
+		x = fileList.length-1;
+	}
+	setImg(x);
+}
+function NextImg(){
+	x++;
+	if(x > fileList.length){
+		x = 0;
+	}
+	setImg(x);
+}
+
+//sets image to image within array at passed index
+function setImg(index){
+	index = (Math.abs(index)%fileList.length);
+	document.getElementById("previewImage").src = URL.createObjectURL(fileList[index]);
+}
+</script>

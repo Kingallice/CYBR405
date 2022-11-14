@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+<title>9/14/2021</title>
+<h1 id="topPage">Activity 2</h1>
+<p><a href="#bottomPage">Bottom of Page</a></p>
+</head>
+<body>
+<ol>
+<li><p>When was this webpage created? Check page title for the answer.<p/></li>
+<li><p id="Squares">Squares of 1-10<br></p>
+<script>
+var text = ""
+for(let i = 1; i<=10; i++){
+	text += i + "<sup>2</sup> = " + (i*i) + "<br>"
+}
+document.getElementById("Squares").innerHTML += text</script>
+</li>
+<li>Hello <del>Mike</del> <ins><mark>Jane</mark></ins>, we regret to inform you that we have not selected you for the managerial position.</li>
+<li><p>Acronyms & Abbreviations<br>
+<abbr title="Clash of Clans">COC</abbr> is a game made by Supercell.<br> <br>
+<abbr title="laugh out loud">lol</abbr> is used in texting as a way to laugh.<br> <br>
+<abbr title="Information Technology">IT</abbr> is a possible major involving computers<br> <br>
+<abbr title="Doctor">Dr.</abbr> is the way to refer to someone with a Doctorate<br> <br>
+<abbr title="Ecetera">etc.</abbr> is a way to refer to more items<br> <br>
+</p></li>
+<li><p>Search Engines<p>
+	<ul>
+	<li><a href="https://google.com">Google</a></li>
+	<li><a href="https://yahoo.com">Yahoo</a></li>
+	<li><a href="https://duckduckgo.com">DuckDuckGo</a></li>
+	<li><a href="https://bing.com">Bing</a></li>
+	</ul></li>
+<li><p>Webpages in new Window</p>
+	<ul>
+	<li><a href="https://www.nga.gov/" target="_blank">National Gallery of Art</a></li>
+	<li><a href="https://www.carmax.com/cars" target="_blank">Carmax</a></li>
+	<li><a href="https://www.tacobell.com/" target="_blank">Taco Bell</a></li>
+	<li><a href="https://www.guitarcenter.com/" target="_blank">Guitar Center</a></li>
+	<li><a href="https://www.walmart.com/" target="_blank">Walmart</a></li>
+	</ul></li>
+</ol>
+<p id="bottomPage"><a href="#topPage">Top of Page</a></p>
+</body>

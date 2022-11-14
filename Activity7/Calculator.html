@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Calculator</title>
+	</head>
+	<body>
+		<h2>Calculator</h2>
+		<table>
+			<tr><th>1st Number</th><th><input id="in1" type="text"></th></tr>
+			<tr><th>2nd Number</th><th><input id="in2" type="text"></th><tr>
+			<tr><th colspan="2">
+				<input type="Button" value="Add" onclick="Add()">
+				<input type="Button" value="Subtract" onclick="Subtract()">
+				<input type="Button" value="Multiply" onclick="Multiply()">
+				<input type="Button" value="Divide" onclick="Divide()"></th></tr>
+			<tr><td colspan="2"><p id="out"></p></td></tr>
+		</table>
+	</body>
+</html>
+<script>
+//Gets elements for input and output
+var input1 = document.getElementById("in1");
+var input2 = document.getElementById("in2");
+var output = document.getElementById("out");
+
+function Add(){
+	var num1 = parseFloat(input1.value);
+	var num2 = parseFloat(input2.value);
+	var result = num1 + num2;
+	document.getElementById("out").innerHTML = "The result is: <br>" + result;
+}
+function Subtract(){
+	var num1 = parseFloat(input1.value);
+	var num2 = parseFloat(input2.value);
+	var result = num1 - num2;
+	document.getElementById("out").innerHTML = "The result is: <br>" + result;
+}
+function Multiply(){
+	var num1 = parseFloat(input1.value);
+	var num2 = parseFloat(input2.value);
+	var result = num1 * num2;
+	document.getElementById("out").innerHTML = "The result is: <br>" + result;
+}
+function Divide(){
+	var num1 = parseFloat(input1.value);
+	var num2 = parseFloat(input2.value);
+	var result = num1 / num2;
+	document.getElementById("out").innerHTML = "The result is: <br>" + result;
+}
+</script>

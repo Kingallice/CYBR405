@@ -1,0 +1,11 @@
+h1 {
+	color: red;
+	border-bottom: 1px red solid;
+}
+h2 {
+	color: red;
+	margin-left: 100px;
+}
+p {
+	margin-left: 100px;
+}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<head>
+	<title>Clock</title>
+</head>
+<body>
+	<h1>The current time is:</h1>
+	<p style="font-size:25pt;" id="timeOut" onload="update()"></p>
+</body>
+</html>
+<script>
+function update(){
+let	date = new Date();
+	document.getElementById("timeOut").innerHTML = date.toLocaleTimeString();
+}
+setInterval(update,1000);
+</script>

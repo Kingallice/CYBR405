@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		table {
+			margin-left: auto;
+			margin-right: 40%;
+			border: solid 3px;
+			border-color: black;
+			width:550px;
+			padding: 15px;
+		}
+		caption {
+			font-size:24pt;
+		}
+		th {
+			font-size:18pt;
+			text-align: right;
+			padding: 5px;;
+		}
+		td {
+			text-align:left;
+		}
+		input {
+			width: 95%;
+			height 65px;
+			font-size: 15pt;
+		}
+		#city,#state,#zip {
+			width: 70px;
+		}
+	</style>
+</head>
+<body>
+<div id="overlay">
+	<form id="formElement">
+	<div id="overlayText" style="top:50px; height:250px;">
+		<div style="text-align:center;">
+			<h1 style="font-size:24pt">Success!</h1>
+			<h4 style="font-size:15pt;">Order Placed!</h4>
+			<input id="ACK" type="button" value="OK" onclick="CloseOverlay()">
+		</div>
+	</div>
+	<div style="opacity:0%;" id="overlayBack">
+	</div>
+	</form>
+</div>
+	<h1 style="margin:30px;">Checkout</h1>
+	<div style="margin:30px; text-align:center;">
+		<form>
+		<table>
+			<caption>Card Details</caption>
+			<tr><th>Card Number</th><td class="required"><input id="card" type="text"></td></tr>
+			<tr><th>CVV</th><td class="required"><input id="cvv" type="text"></td></tr>
+			<tr><th>Expiration</th><td class="required"><input id="exp" type="text"></td></tr>
+			<tr><th>Name</th><td class="required"><input id="cardName" type="text"></td></tr>
+		</table>
+		</form>
+		<form>
+		<table>
+			<caption>Shipping Details</caption>
+			<tr><th>Name</th><td class="required" colspan="3"><input id="shipName" type="text"></td></tr>
+			<tr><th>Street Address</th><td class="required" colspan="3"><input id="addr" type="text"></td></tr>
+			<tr><th>Apt Number</th><td colspan="3"><input id="apt" type="text"></td></tr>
+			<tr><th>City</th><td class="required"><input id="city" type="text"></td><th>State</th><td class="required"><input id="state" type="text"></td></tr>
+			<tr><th>Zip Code</th><td class="required"><input id="zip" type="text"></td></tr>
+		</table>
+		</form>
+		<small id="error" style="color: red;"></small>
+	</div>
+	<div id="checkout">
+	</div>
+</body>
+<script>
+function checkInputs(){
+	cardNum = document.getElementById("card").value;
+	cvv = document.getElementById("cvv").value;
+	exp = document.getElementById("exp").value;
+	cardName = document.getElementById("cardName").value;
+	
+	shipName = document.getElementById("shipName").value;
+	addr = document.getElementById("addr").value;
+	city = document.getElementById("city").value;
+	state = document.getElementById("state").value;
+	zip = document.getElementById("zip").value;
+	
+	requireds = document.getElementsByClassName("required");
+	
+	if(cardNum != "" || cvv != "" || exp != "" || cardName != "" ||
+		shipName != "" || addr != "" || city != "" || state != "" || zip != "")
+			return true;
+	else {		
+		for(let i = 0; i < requireds.length; i++){
+			requireds[i].style = "border:solid red; border-width:2px;";
+		}
+		document.getElementById("error").innerHTML = "*Required";
+		return false;
+	}
+}
+checkout = document.getElementById("checkout");
+function Checkout(){
+	if (window.sessionStorage.accnumber != null){
+	//alert(window.sessionStorage.accnumber);
+	var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST", "Scripts/checkout.php");
+		xmlhttp.getResponseHeader('Content-type', 'application/json');
+		
+		xmlhttp.onload = function(){
+			if(xmlhttp.responseText == ""){
+				window.location.replace("main.html");
+			}
+			checkout.innerHTML = xmlhttp.responseText;
+		}
+		form = document.createElement("form");
+		form.innerHTML = "<input type='text' name='accnumber' value='"+window.sessionStorage.accnumber+"'>";
+		xmlhttp.send(new FormData(form));
+	}
+	//gets cart from sessionStorage for guests
+	else {
+		window.location.replace("main.html");
+	}
+}
+function CloseOverlay(){
+	document.getElementById("overlay").style.display = 'none';
+	window.location.replace("main.html");
+}
+function OpenOverlay(){
+	document.getElementById("overlay").style.display = 'block';
+}
+function succeed(){
+	if(checkInputs()){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST", "Scripts/emptycart.php");
+		xmlhttp.getResponseHeader('Content-type', 'application/json');
+
+		form = document.createElement("form");
+		form.innerHTML = "<input type='text' name='accnumber' value='"+window.sessionStorage.accnumber+"'>";
+		xmlhttp.send(new FormData(form));
+	OpenOverlay();
+	}
+}
+Checkout();
+</script>

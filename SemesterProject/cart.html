@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="overlay">
+	<form id="formElement">
+	<div id="overlayText">
+		<div style="height:10px;">
+			<svg style="height: 30px; width:30px;" onclick="CloseOverlay();">
+				<line x1="5" y1="25" 
+				  x2="25" y2="5" 
+				  stroke="black" 
+				  stroke-width="2"/>
+				<line x1="5" y1="5" 
+				  x2="25" y2="25" 
+				  stroke="black" 
+				  stroke-width="2"/></svg>
+		</div>
+		<div style="text-align:center;">
+			<h4>Please login to purchase products!</h4>
+			<img height="40vh" src="Images\profileBlue.svg">
+			<h1 style="margin:0px;">Login</h1>
+			<div>
+				<div>
+					<input type="text" class="overlayLogin" id="username" name="username" placeholder="Username">
+				</div>
+				<div>
+					<input type="password" class="overlayLogin" id="password" name="password" placeholder="Password">
+				</div>
+			<input style="width: 30%; height: 40px;" type="button" value="Login" onclick="login()" name="submit" id="submit">
+			<p>Dont have an account? <a href="signup.html">Sign Up</a></p>
+				<small id="error" style="color:red;"></small>
+			</div>
+		</div>
+	</div>
+	<div id="overlayBack">
+	</div>
+	</form>
+</div>
+	<h1 style="margin: 15px;">Cart Details</h1>
+	<div id="cart">
+		<h2 style="text-align:center;">Loading...</h2>
+	</div>
+</body>
+<script>
+//gets elements for database info
+var divCart = document.getElementById("cart");
+
+//sends xmlrequest and gets information for logged in user
+function getCart(){
+	if (window.sessionStorage.accnumber != null){
+	//alert(window.sessionStorage.accnumber);
+	var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("POST", "Scripts/cart.php");
+		xmlhttp.getResponseHeader('Content-type', 'application/json');
+		
+		xmlhttp.onload = function(){
+			divCart.innerHTML = xmlhttp.responseText;
+		}
+		form = document.createElement("form");
+		form.innerHTML = "<input type='text' name='accnumber' value='"+window.sessionStorage.accnumber+"'>";
+		xmlhttp.send(new FormData(form));
+	}
+	//gets cart from sessionStorage for guests
+	else {
+		OpenOverlay();
+	}
+}
+function removeCart(itemName){
+var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("POST", "Scripts/removecart.php");
+	xmlhttp.getResponseHeader('Content-type', 'application/json');
+	
+	xmlhttp.onload = function(){
+		getCart();
+	}
+	form = document.createElement("form");
+	form.innerHTML = "<input type='text' name='itemname' = value='"+itemName+"'><input type='text' name='accnumber' value='"+window.sessionStorage.accnumber+"'>";
+	xmlhttp.send(new FormData(form));
+}
+function checkOut(){
+	window.location.replace("checkout.html");
+}
+function Redirect(path){
+	document.location.replace(path);
+}
+function CloseOverlay(){
+	document.getElementById("overlay").style.display = 'none';
+	window.location.replace("main.html");
+}
+function OpenOverlay(){
+	document.getElementById("overlay").style.display = 'block';
+}
+getCart();
+</script>
+<script>
+var form = document.getElementById("formElement");
+var username = document.getElementById("username");
+var password = document.getElementById("password");
+var txtError = document.getElementById("error");
+
+function login(){
+	txtError.innerHTML = "";
+	if(username.value != "" && password.value != ""){
+		var xmlhttp = new XMLHttpRequest();
+			
+		xmlhttp.open("POST", "Scripts/login.php");
+		xmlhttp.getResponseHeader('Content-type', 'application/json');
+		
+		xmlhttp.onload = function(){
+			if(xmlhttp.responseText.split(",")[0] == 1){
+				username.style = "border:none;";
+				password.style = "border:none;";
+				txtError.innerHTML = ""
+				window.sessionStorage.setItem("name", xmlhttp.responseText.split(",")[1]);
+				window.sessionStorage.setItem("accnumber", xmlhttp.responseText.split(",")[2]);
+				window.sessionStorage.setItem("email", xmlhttp.responseText.split(",")[3]);
+				document.location.replace("cart.html")
+			}
+			if(xmlhttp.responseText.split(",")[0] == 0){
+				txtError.innerHTML = xmlhttp.responseText.split(",")[1];				
+			}
+		}
+		xmlhttp.send(new FormData(form));
+	}
+	else{
+		username.style = "border:solid red; border-width:2px;";
+		password.style = "border:solid red; border-width:2px;";
+		txtError.innerHTML = "*Required"
+	}
+}
+</script>

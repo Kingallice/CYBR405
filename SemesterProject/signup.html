@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <link href="styles.css" rel="stylesheet">
+    </head>
+<body>
+	<div style="text-align:center; margin-left:35vw; width:50%;">
+    		<form id="formElement" method="post" action="Scripts/newAccount.php">
+        		<div id="div_login" style="padding:25px; width: 25vw;">
+					<!img height="100vh" src="Images\profileBlue.svg">
+					<h1>Sign Up</h1>
+					<div>
+						<input type="text" class="textbox" id="username" name="username" placeholder="Username" />
+					</div>
+					<div>
+						<input type="email" class="textbox" id="email" name="email" placeholder="Email"/>
+					</div>
+					<div>
+						<input type="password" class="textbox" id="password" name="password" placeholder="Password"/>
+					</div>
+					<div>
+						<input type="password" class="textbox" id="confirm_password" name="confirm_password" placeholder="Confirm Password"/>
+						
+					</div>
+					<div>
+						<input style="width: 35%; height: 40px;" onclick="signUp()" type="button" value="Sign Up" id="submit" />
+						<p>Already have an account? <a href="login.html">Login</a></p>
+						<small id="error" style="color:red"></small>
+					</div>
+				</div>
+    		</form>
+	</div>
+</body>
+</html>
+<script>
+var form = document.getElementById("formElement");
+var username = document.getElementById("username");
+var email = document.getElementById("email");
+var password = document.getElementById("password");
+var confirm_password = document.getElementById("confirm_password");
+var txtError = document.getElementById("error");
+
+function signUp(){
+	txtError.innerHTML = "";
+	if(username.value != "" && email.value != "" && password.value != "" && confirm_password != ""){
+		if(password.value == confirm_password.value){
+			var xmlhttp = new XMLHttpRequest();
+			
+			xmlhttp.open("POST", "Scripts/newAccount.php");
+			xmlhttp.getResponseHeader('Content-type', 'application/json');
+			
+			xmlhttp.onload = function(){
+				if(xmlhttp.responseText.split(",")[0] == 1){
+					document.location.replace("login.html")
+				}
+				if(xmlhttp.responseText.split(",")[0] == 0){
+					if(xmlhttp.responseText.split(",")[1].trim() == "Exists"){
+						txtError.innerHTML = "Account already exists!";
+					}
+					else{
+						txtError.innerHTML = "An error occurred! <br>Please try again later!";
+					}					
+				}
+			}
+			xmlhttp.send(new FormData(form));
+		}
+		else{
+			password.style = "border:solid red; border-width:2px;";
+			confirm_password.style = "border: solid red; border-width:2px";
+			txtError.innerHTML = "*Passwords do not match!";
+		}	
+	}
+	else{
+		username.style = "border:solid red; border-width:2px;";
+		email.style = "border:solid red; border-width:2px;";
+		password.style = "border:solid red; border-width:2px;";
+		confirm_password.style = "border:solid red; border-width:2px;";
+		txtError.innerHTML = "*Required"
+	}
+}
+</script>

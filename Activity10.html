@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<head>
+	<title>Colors</title>
+	<style>
+		textarea{
+			width: 90vw; 
+			height: 40vh;
+			padding: 25px;
+			font-size: 16pt;
+		}
+		.button {
+			width: 50px;
+			height 25px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Foreground and Background Colors</h1>
+	<textarea id="text">This is a test.</textarea>
+	<p>Foreground: 
+		<input class="button" type="button" value="White" onclick="ForegroundColor('White')" style="color:White;">
+		<input class="button" type="button" value="Black" onclick="ForegroundColor('Black')" style="color:Black;">
+		<input class="button" type="button" value="Red" onclick="ForegroundColor('Red')" style="color:Red;">
+		<input class="button" type="button" value="Green" onclick="ForegroundColor('Green')" style="color:Green;">
+		<input class="button" type="button" value="Blue" onclick="ForegroundColor('Blue')" style="color:Blue;"></p>
+	<p>Background: 
+		<input class="button" type="button" value="White" onclick="BackgroundColor('White')" style="background-color:White;">
+		<input class="button" type="button" value="Black" onclick="BackgroundColor('Black')" style="background-color:Black; color:White;">
+		<input class="button" type="button" value="Red" onclick="BackgroundColor('Red')" style="background-color:Red; color:White;">
+		<input class="button" type="button" value="Green" onclick="BackgroundColor('Green')" style="background-color:Green; color:White;">
+		<input class="button" type="button" value="Blue" onclick="BackgroundColor('Blue')" style="background-color:Blue; color:White;"></p>
+</body>
+<script>
+textarea = document.getElementById("text");
+
+function ForegroundColor(color){
+	textarea.style.color = color;
+}
+function BackgroundColor(color){
+	textarea.style.background = color;
+}
+</script>

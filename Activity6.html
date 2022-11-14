@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<body>
+<h1>Array JavaScript</h1>
+<h2>Input</h2>
+<p id="input1"></p>
+<h2>Output</h2>
+<p id="output1"></p>
+<hr>
+<h1>String JavaScript</h1>
+<h2>Input</h2>
+<button onclick="abcString()">Input String</button>
+<p id="input2"></p>
+<h2>Output</h2>
+<p id="output2"></p>
+</body>
+</html>
+<script>
+arrNum = [];
+const TERMS = 10;
+const MAX = 50;
+//Lost on what input is...
+for(let i = 0; i < TERMS; i++)
+{
+	arrNum[i] = Math.floor(Math.random() * MAX);
+}
+low = arrNum[0];
+high = 0;
+evenCount = 0;
+oddCount = 0;
+for(let i = 0; i < arrNum.length; i++)
+{
+	if(arrNum[i]%2 == 0)
+		evenCount++;
+	else
+		oddCount++;
+	if(arrNum[i] < low)
+		low = arrNum[i];
+	else if (arrNum[i] > high)
+		high = arrNum[i];
+}
+document.getElementById("input1").innerHTML = arrNum;
+document.getElementById("output1").innerHTML = ("Low: " + low + "<br>High: " + high + "<br>Even Count: " + evenCount + "<br>Odd Count: " + oddCount);
+
+function abcString()
+{
+	var strInput = prompt("Enter a string to be displayed alphabetically.")
+	arrIn = []
+
+	for(let i = 0; i < strInput.length; i++)
+		arrIn[i] = strInput[i];;
+	
+	arrIn = arrIn.sort();
+	text = ""
+	for (let i = 0; i < arrIn.length; i++)
+		text += arrIn[i];;
+
+	document.getElementById("input2").innerHTML = strInput;
+	document.getElementById("output2").innerHTML = text;
+}
+</script>

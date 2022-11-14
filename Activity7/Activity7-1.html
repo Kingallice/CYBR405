@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html id="page">
+	<head>
+		<title>Activity 7</title>
+	</head>
+	<body>
+		<h1 id="text">Activity 7!</h1>
+		<input id="btn" type="button" onclick="greenBK()" value="Click Me!">
+	</body>
+</html>
+<script>
+function greenBK(){
+	document.getElementById("page").style = "background-color: green;";
+	document.getElementById("text").innerHTML = "This is a green color";
+	document.getElementById("btn").remove();
+}
+</script>

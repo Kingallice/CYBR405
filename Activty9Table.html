@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+	<title>Table</title>
+	<style>
+	table, td{
+		border: 1px solid;
+		border-color: black;
+	}
+	</style>
+</head>
+<body>
+	<table id="table">
+		<tr><td>New Cell1</td><td>New Cell2</td></tr>
+		<tr><td>New Cell1</td><td>New Cell2</td></tr>
+		<tr><td>New Cell1</td><td>New Cell2</td></tr>
+	</table>
+	<p><input type="button" value="Insert row" onclick="Add()"> <input type="button" value="Remove row" onclick="Del()"></p>
+</body>
+</html>
+<script>
+var table = document.getElementById("table");
+function Add(){
+	table.innerHTML += "<tr><td>New Cell1</td><td>New Cell2</td></tr>"
+}
+function Del(){
+	table.innerHTML = table.innerHTML.substr(0,table.innerHTML.lastIndexOf("<tr>"));
+}
+</script>

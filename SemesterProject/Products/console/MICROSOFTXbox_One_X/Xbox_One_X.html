@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<div id="overlay">
+	<form id="formElement">
+	<div id="overlayText">
+		<div style="height:10px;">
+			<svg style="height: 30px; width:30px;" onclick="CloseOverlay();">
+				<line x1="5" y1="25" 
+				  x2="25" y2="5" 
+				  stroke="black" 
+				  stroke-width="2"/>
+				<line x1="5" y1="5" 
+				  x2="25" y2="25" 
+				  stroke="black" 
+				  stroke-width="2"/></svg>
+		</div>
+		<div style="text-align:center;">
+			<h4>Please login to purchase products!</h4>
+			<img height="40vh" src="..\..\..\Images\profileBlue.svg">
+			<h1 style="margin:0px;">Login</h1>
+			<div>
+				<div>
+					<input type="text" class="overlayLogin" id="username" name="username" placeholder="Username">
+				</div>
+				<div>
+					<input type="password" class="overlayLogin" id="password" name="password" placeholder="Password">
+				</div>
+			<input style="width: 30%; height: 40px;" type="button" value="Login" onclick="login()" name="submit" id="submit">
+			<p>Dont have an account? <a href="../../../signup.html">Sign Up</a></p>
+				<small id="error" style="color:red;"></small>
+			</div>
+		</div>
+	</div>
+	<div id="overlayBack">
+	</div>
+	</form>
+</div>
+<head>
+	<link rel="stylesheet" href="..\..\..\styles.css">
+	<meta id="meta" name=""></meta>
+</head>
+<body id="body">
+<div style="margin:0px;">
+	<div class="item">
+		<div id="preview" onerror="reload();">
+			<div class="container" style="background-color: white; width:500px; height:400px;">
+				<img id="previewImage" class="center" style="width: 75%; max-width:90%; height: auto; max-height:90%" src=""></img></div>
+			<div class="container" style="height: 75px">
+				<button style="float: left;" onclick="PrevImg()">
+					<svg width="50px" height="70px"><polygon points="35,10 35,60 10,35"/></svg>
+				</button>
+				<h2 class="center">Images</h2>
+				<button style="float: right;" onclick="NextImg()">
+					<svg width="50px" height="70px"><polygon points="10,10 35,35 10,60"/></svg>
+				</button></div>
+		</div>
+	<div style="margin: 10px; float: left; width: 35%;">
+		<p id="cat" hidden></p>
+		<h1 id="name"></h1>
+		<h2 id="price">Price:</h2>
+		<h3>Description: </h3>
+		<p id="desc" style="margin: 10px; width: 100%;"></p>
+		<span style="">
+			Quantity: <input onchange="floorValue()" type="number" id="quantity" value="1" placeholder="Quantity" style="width:3vw; height: 5vh; text-align:center;">
+			<input class="button" id="addCart" onclick="addToCart()" value="Add to Cart" type="button" style="width: 15rem; height: 10vh;">
+			<p id="test"></p>
+		</span>
+	</div>
+</div>
+</div>
+</body>
+</html>
+<script id="itemScript">
+item = "Xbox One X";
+document.getElementById("meta").name = item;
+//gets elements for database info
+var h2Name = document.getElementById("name");
+var h2Price = document.getElementById("price");
+var h2Desc = document.getElementById("desc");
+var cat = document.getElementById("cat");
+
+//sends xmlrequest and gets information
+var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", "../../../Scripts/getData.php?item=" + item);
+	xmlhttp.onreadystatechange = function(){
+		if(xmlhttp.readyState == XMLHttpRequest.DONE){
+			setData(xmlhttp.responseText);
+		}
+	}
+    xmlhttp.send();
+
+function setData(txtResponse){
+	//places response into array
+	arrResponse = txtResponse.split("_");
+	
+	//sets data from response into correct elements
+	h2Name.innerHTML = arrResponse[0] + " " + arrResponse[1];
+	h2Price.innerHTML = "Price: $ " + arrResponse[2];
+	h2Desc.innerHTML = arrResponse[3];
+	cat.innerHTML = arrResponse[4]; 
+}
+</script>
+<script>
+//Script to deal with image previews
+var Pictures = [];
+//Sets path for product page
+var path = "../"+location.href.split("/").slice(4,-1).join("/");
+
+//Sends request for images that are available to show
+var xmlpics = new XMLHttpRequest();
+	xmlpics.open("GET", "../../../Scripts/dirContents.php?path=" + path);
+	xmlpics.onreadystatechange = function(){
+		if(xmlpics.readyState == XMLHttpRequest.DONE){
+			LoadPictures(xmlpics.responseText);
+		}
+	}
+    xmlpics.send();
+	
+//Adds available pictures to picture array
+function LoadPictures(inString){
+	inString = inString.replace('"',"");
+	inString = inString.split(",");
+	let i = 0;
+	for(x in inString){
+		image = new Image();
+		image.src = x + ".webp";
+		Pictures[i] = image;
+		i++;
+	}
+	setImg(0);
+}
+
+//Changes the image that is being shown
+function PrevImg(){
+	x -= 1;
+	if(x < 0){
+		x = Pictures.length-1;
+	}
+	setImg(x);
+}
+function NextImg(){
+	x++;
+	if(x >= Pictures.length){
+		x = 0;
+	}
+	setImg(x);
+}
+
+//sets image to image within array at passed index
+function setImg(index){
+	index = (Math.abs(index)%Pictures.length);
+	document.getElementById("previewImage").src = Pictures[index].src;
+}
+</script>
+<script>
+//gets quantity element
+var quantity = document.getElementById("quantity");
+
+//floor function the quantity
+function floorValue(){
+	if(quantity.value < 0){
+		quantity.value = 0;
+	}
+	quantity.value = Math.round(quantity.value);
+}
+//makes call to cart script to add product to cart
+price = document.getElementById("price");
+item = document.getElementById("item");
+quantity = document.getElementById("quantity");
+function addToCart(){
+	if(window.sessionStorage.name != null){
+	var xmlhttp = new XMLHttpRequest();
+			
+		xmlhttp.open("POST", "../../../Scripts/addcart.php");
+		xmlhttp.getResponseHeader('Content-type', 'application/json');
+		
+		xmlhttp.onload = function(){
+			if(xmlhttp.responseText.split(",")[0] == 1){
+				
+			}
+			if(xmlhttp.responseText.split(",")[0] == 0){
+				txtError.innerHTML = xmlhttp.responseText.split(",")[1];				
+			}
+		}
+		form = document.createElement("form");
+		form.innerHTML = "<input type='text' name='accnumber' value='"+window.sessionStorage.accnumber+"'>"+
+							"<input type='text' name='item' value='"+document.getElementById("meta").name+"'>" +
+							"<input type='text' name='quantity' value='"+quantity.value+"'>" +
+							"<input type='text' name='cat' value='"+document.getElementById("cat").innerHTML+"'>";
+		xmlhttp.send(new FormData(form));
+	}
+	else{
+		OpenOverlay();
+	}
+	//alert("Please login or create an account to buy items!");
+}
+function CloseOverlay(){
+	document.getElementById("overlay").style.display = 'none';
+}
+function OpenOverlay(){
+	document.getElementById("overlay").style.display = 'block';
+}
+</script>
+<script>
+var form = document.getElementById("formElement");
+var username = document.getElementById("username");
+var password = document.getElementById("password");
+var txtError = document.getElementById("error");
+
+function login(){
+	txtError.innerHTML = "";
+	if(username.value != "" && password.value != ""){
+		var xmlhttp = new XMLHttpRequest();
+			
+		xmlhttp.open("POST", "../../../Scripts/login.php");
+		xmlhttp.getResponseHeader('Content-type', 'application/json');
+		
+		xmlhttp.onload = function(){
+			if(xmlhttp.responseText.split(",")[0] == 1){
+				username.style = "border:none;";
+				password.style = "border:none;";
+				txtError.innerHTML = ""
+				window.sessionStorage.setItem("name", xmlhttp.responseText.split(",")[1]);
+				window.sessionStorage.setItem("accnumber", xmlhttp.responseText.split(",")[2]);
+				window.sessionStorage.setItem("email", xmlhttp.responseText.split(",")[3]);
+				username.value = "";
+				password.value = "";
+				CloseOverlay();
+			}
+			if(xmlhttp.responseText.split(",")[0] == 0){
+				txtError.innerHTML = xmlhttp.responseText.split(",")[1];				
+			}
+		}
+		xmlhttp.send(new FormData(form));
+	}
+	else{
+		username.style = "border:solid red; border-width:2px;";
+		password.style = "border:solid red; border-width:2px;";
+		txtError.innerHTML = "*Required"
+	}
+}
+</script>

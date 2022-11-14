@@ -1,0 +1,39 @@
+body {
+	background-color: gray;
+	text-align: center;
+}
+table {
+	margin-left:auto;
+	margin-right:auto;
+}
+input {
+	height: 20px;
+	margin: 3px;
+}
+.btn {
+	font-size:15pt;
+	height: 30px;
+	margin: 1px;
+}
+.number {
+	text-align: left;
+}
+#tablediv {
+	width: 400px;
+	border: 5px solid;
+	border-color: black;
+	margin-left:auto;
+	margin-right:auto;
+}
+#add {
+	width: 100px;
+}
+#remove {
+	width: 150px;
+}
+#sort {
+	width: 75px;
+}
+#buttons {
+	padding: 5px;
+}

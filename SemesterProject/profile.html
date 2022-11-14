@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body style="margin: 15px;">
+	<h1>Profile</h1>
+	<h2 id="username">User: </h2>
+	<h2 id="email">Email: </h2>
+	<input id="btnLogout" onclick="Logout()" type="button" value="Logout">
+</body>
+<script>
+document.getElementById("username").innerHTML += window.sessionStorage.getItem("name");
+document.getElementById("email").innerHTML += window.sessionStorage.getItem("email");
+if(window.sessionStorage.getItem("accnumber") == "00000000"){
+	document.body.innerHTML += "<input id='btnAddProduct' type='button' value='Add Product' onclick='AddProduct()'>";
+}
+function Logout(){
+	window.sessionStorage.removeItem("name");
+	window.sessionStorage.removeItem("accnumber");
+	window.sessionStorage.removeItem("email");
+	location.replace("main.html");
+}
+function AddProduct(){
+	location.replace("AddProduct.html");
+}
+</script>

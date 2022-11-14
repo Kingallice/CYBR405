@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+<link href="styles.css" rel="stylesheet">
+</head>
+<body>
+	<div class="sidenav" id="catTable">
+		<div>
+		<h1 style="margin: 10px;">Categories</h1>
+			<span id="catergories">
+			</span>
+		</div>
+	</div>
+	<div id="productTable" style="margin-left: 240px; margin-right:25px;">
+	</div>
+</body>
+<script>
+divCategories = document.getElementById("catergories");
+prodTable = document.getElementById("productTable");
+function GetFeatured(){
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", "Scripts/getFeatured.php");
+	
+	xmlhttp.onreadystatechange = function(){
+		if(xmlhttp.readyState == XMLHttpRequest.DONE){
+			prodTable.innerHTML = "<h2>Featured Items</h2>" + xmlhttp.responseText;
+		}
+	}
+	xmlhttp.send();
+}
+function GetCats(){
+	var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", "Scripts/getcatergories.php");
+		
+		xmlhttp.onreadystatechange = function(){
+			if(xmlhttp.readyState == XMLHttpRequest.DONE){
+				out = xmlhttp.responseText.split("_");
+				for(i = 0; i < out.length; i++){
+					if(out[i] != "")
+						divCategories.innerHTML += "<h3 class='catergory' style='margin-left:10px; font-size:15pt;' onclick='getTable(`"+out[i]+"`)'>|"+(out[i]).toUpperCase()+"</h3>";
+				}
+			}
+		}
+		xmlhttp.send();
+}
+function resize(){
+	//document.getElementById("catTable").height = 
+	alert(document.getElementById("productTable").height);
+}
+function getTable(search){
+	prodTable.innerHTML = "";
+	
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", "Scripts/getProductTable.php?table="+search);
+	
+	xmlhttp.onreadystatechange = function(){
+		if(xmlhttp.readyState == XMLHttpRequest.DONE){
+			prodTable.innerHTML = xmlhttp.responseText;
+		}
+	}
+	xmlhttp.send();
+}
+
+function Redirect(path){
+	document.location.replace(path);
+}
+GetCats();
+GetFeatured();
+</script>

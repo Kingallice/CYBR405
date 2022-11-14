@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body style="background-color: #0066b2;">
+	<div style="margin: 20px">
+		<div style="float:left; padding:20px; width:15%;">
+			<img style="color: #fcc200 height:auto; width:100%" src="Images\logo.svg"></div>
+		<div style="float:left; color:#fcc200; padding: 20px;">
+			<form action="Scripts/search.php" target="main">
+				<pre><input id="search" type="text" placeholder="Search.." name="search"><input type="submit" value="Search"</pre></form></div>
+		<div style="float:right; padding: 20px; width: 5%;">
+			<a href="main.html" target="main"><img height="80%" width="80%"src="Images\home.svg"></a></div>
+		<div style="float:right; padding: 20px; width: 5%;">
+			<a href="cart.html" target="main"><img height="80%" width="80%" src="Images\cart.svg"/></a></div>
+		<div style="float:right; padding: 15px; width: 5%;">
+			<a id="login" href="login.html" onclick="checkLogin()" target="main"><img height="80%" width="80%" src="Images\profile.svg"/></a></div>
+	</div>
+</body>
+<script>
+	function checkLogin(){
+		if(window.sessionStorage.name){
+			document.getElementById("login").href = "profile.html";
+		}
+		else{
+			document.getElementById("login").href = "login.html"
+		}
+	}
+	
+if(window.sessionStorage.name == null){
+	windows.sessionStorage.name = "GUEST";
+}		
+</script>
